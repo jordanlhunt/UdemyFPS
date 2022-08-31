@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://effects/raw_assets/muzzleflash3.glb" type="PackedScene" id=1]
+[ext_resource path="res://weapons/raw_assets/rocket.glb" type="PackedScene" id=2]
+[ext_resource path="res://effects/blankcircle.png" type="Texture" id=3]
+[ext_resource path="res://weapons/Rocket.gd" type="Script" id=5]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.265183
+
+[sub_resource type="SpatialMaterial" id=2]
+flags_transparent = true
+flags_unshaded = true
+flags_vertex_lighting = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 0.87451, 0.784314, 0.815686, 1 )
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0, 0.135484, 0.258065, 0.348387, 0.574194, 0.987578 )
+colors = PoolColorArray( 0.859375, 0.859375, 0.859375, 1, 0.750276, 0.867188, 0.74648, 0.968729, 0.926097, 0.957031, 0.925481, 0.940437, 0.889199, 0.9375, 0.885989, 0.93334, 0.81341, 0.867188, 0.797304, 0.916611, 0, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+gravity = Vector3( 0, 0, 0 )
+scale = 0.36
+color_ramp = SubResource( 6 )
+
+[sub_resource type="QuadMesh" id=4]
+
+[node name="Rocket" type="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0700688, 0 )
+collision_mask = 5
+script = ExtResource( 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.713714 )
+shape = SubResource( 1 )
+
+[node name="Graphics" type="Spatial" parent="."]
+
+[node name="rocket" parent="Graphics" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+
+[node name="muzzleflash3" parent="Graphics/rocket" instance=ExtResource( 1 )]
+transform = Transform( -3.27835e-08, -1.5, 3.27835e-08, 0, -6.55671e-08, -0.75, 0.75, -6.55671e-08, 0, 0.00900102, -0.00940186, 0.0185289 )
+
+[node name="SmokeTrail" type="Particles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0296844, -0.00665951, 0.0662913 )
+material_override = SubResource( 2 )
+amount = 20
+local_coords = false
+process_material = SubResource( 3 )
+draw_pass_1 = SubResource( 4 )
+
+[node name="SpawnAfterFireTimer" type="Timer" parent="."]
+wait_time = 0.06
+one_shot = true
+autostart = true
+
+[node name="ExplodeAfterFireTimer" type="Timer" parent="."]
+wait_time = 0.06
+one_shot = true
+
+[node name="FreeAfterImpactTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="SpawnAfterFireTimer" to="." method="show"]
+[connection signal="timeout" from="ExplodeAfterFireTimer" to="." method="queue_free"]
+[connection signal="timeout" from="FreeAfterImpactTimer" to="." method="Explode"]

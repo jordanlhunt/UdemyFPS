@@ -1,0 +1,141 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://UI/TypeWriterUIDyanmic.tres" type="DynamicFont" id=1]
+[ext_resource path="res://UI/metalbackground.png" type="Texture" id=2]
+[ext_resource path="res://UI/StatsDisplay.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=21]
+resource_name = "Damage"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0.960784, 0.00392157, 0.00392157, 0.294118 ), Color( 0.960784, 0.00392157, 0.00392157, 0 ) ]
+}
+
+[sub_resource type="Animation" id=22]
+resource_name = "Heal"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0.952941, 0, 0.294118 ), Color( 0.960784, 0.00392157, 0.00392157, 0 ) ]
+}
+
+[sub_resource type="Animation" id=23]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.960784, 0.00392157, 0.00392157, 0.2 ) ]
+}
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="RestartMessage" type="Label" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -445.0
+margin_top = -98.5
+margin_right = 445.0
+margin_bottom = 98.5
+custom_fonts/font = ExtResource( 1 )
+text = "Contract expired, The forces of the Exiled Host will uses your body in their profane union of machine and flesh.
+
+Press 'Z' to Restart"
+align = 1
+autowrap = true
+
+[node name="Panel" type="TextureRect" parent="RestartMessage"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = -1.0
+margin_right = 1.0
+margin_bottom = -1.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 1
+
+[node name="StatsDisplay" type="Label" parent="."]
+margin_left = 39.0
+margin_top = 45.0
+margin_right = 400.0
+margin_bottom = 122.0
+custom_fonts/font = ExtResource( 1 )
+text = "Health: Placeholder
+Ammo: Placeholder"
+script = ExtResource( 3 )
+
+[node name="HealthEffects" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.960784, 0.00392157, 0.00392157, 0.2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HealthEffects"]
+autoplay = "Damage"
+anims/Damage = SubResource( 21 )
+anims/Heal = SubResource( 22 )
+anims/RESET = SubResource( 23 )

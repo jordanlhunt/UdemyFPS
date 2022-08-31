@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://effects/blankcircle.png" type="Texture" id=1]
+[ext_resource path="res://effects/Gib/Gib.tscn" type="PackedScene" id=2]
+[ext_resource path="res://effects/Gib/Gibs.gd" type="Script" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 1 )
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0.564815, 1 ), 0.0, 2.71169, 0, 0, Vector2( 0.936449, 0.161364 ), 3.48387, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+direction = Vector3( 0, 1, 0 )
+spread = 15.0
+initial_velocity = 10.0
+scale = 0.1
+scale_random = 0.15
+scale_curve = SubResource( 3 )
+color = Color( 0.788235, 0.286275, 0.839216, 1 )
+
+[sub_resource type="QuadMesh" id=5]
+
+[node name="Gibs" type="Spatial"]
+script = ExtResource( 3 )
+
+[node name="Gib1" parent="." instance=ExtResource( 2 )]
+transform = Transform( 0.937416, -0.320302, 0.136593, 0.328442, 0.94362, -0.0413131, -0.11566, 0.0835906, 0.989765, 0.448719, 0, 0 )
+
+[node name="Gib2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 0.193345, -0.851972, 0.486581, 0.956886, 0.273313, 0.0983293, -0.216763, 0.446592, 0.868084, -0.225837, 0.406914, 0 )
+
+[node name="Gib3" parent="." instance=ExtResource( 2 )]
+transform = Transform( -0.927791, -0.00490752, 0.373069, 0.255638, -0.73668, 0.62606, 0.27176, 0.676224, 0.68474, 0, 0, 0 )
+
+[node name="Gib4" parent="." instance=ExtResource( 2 )]
+transform = Transform( 0.646569, 0.73152, -0.216393, -0.685553, 0.681607, 0.255792, 0.334612, -0.0170389, 0.942202, 0.0321217, 0.0457845, -0.861198 )
+
+[node name="Particles" type="Particles" parent="."]
+material_override = SubResource( 1 )
+emitting = false
+amount = 9
+one_shot = true
+explosiveness = 0.74
+local_coords = false
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 5 )
+
+[node name="FreeAfterTimerExpires" type="Timer" parent="."]
+wait_time = 2.75
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="FreeAfterTimerExpires" to="." method="queue_free"]
